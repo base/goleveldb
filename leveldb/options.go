@@ -7,8 +7,8 @@
 package leveldb
 
 import (
-	"github.com/syndtr/goleveldb/leveldb/filter"
-	"github.com/syndtr/goleveldb/leveldb/opt"
+	"github.com/base/goleveldb/leveldb/filter"
+	"github.com/base/goleveldb/leveldb/opt"
 )
 
 func dupOptions(o *opt.Options) *opt.Options {
@@ -23,6 +23,11 @@ func dupOptions(o *opt.Options) *opt.Options {
 }
 
 func (s *session) setOptions(o *opt.Options) {
+	// Read additional initialization params from environment variables, if set.
+	if o != nil {
+		readOptionsFromEnv(o)
+	}
+
 	no := dupOptions(o)
 	// Alternative filters.
 	if filters := o.GetAltFilters(); len(filters) > 0 {
